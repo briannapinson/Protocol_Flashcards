@@ -5,6 +5,7 @@ import { useState } from 'react';
 const App = () => {
 
 const [currentIndex, setCurrentIndex] = useState(0);
+const [history, setHistory] = useState([])
 
 const cards = [
   { question: "Telnet", answer: "Allows a user on a remote client machine, called the Telnet client, to access the resources of another machine, the Telnet server.", layer: "Application", image: "src/images/TelNet.png"},
@@ -31,12 +32,15 @@ const cards = [
 
 const getRandomCard = () => {
   const randomIndex = Math.floor(Math.random() * cards.length)
-  setCurrentIndex(randomIndex)
+  setHistory([...history, currentIndex])  
+  setCurrentIndex(randomIndex)            
 }
 
 const getPreviousCard = () => {
-  if (currentIndex > 0) {
-    setCurrentIndex(currentIndex - 1)
+  if (history.length > 0) {
+    const lastIndex = history[history.length - 1]
+    setCurrentIndex(lastIndex)
+    setHistory(history.slice(0, -1))
   }
 }
 
