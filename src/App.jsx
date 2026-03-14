@@ -5,7 +5,6 @@ import { useState } from 'react';
 const App = () => {
 
 const [currentIndex, setCurrentIndex] = useState(0);
-const [history, setHistory] = useState([])
 
 const cards = [
   { question: "Telnet", answer: "Allows a user on a remote client machine, called the Telnet client, to access the resources of another machine, the Telnet server.", layer: "Application", image: "src/images/TelNet.png"},
@@ -30,18 +29,21 @@ const cards = [
   { question: "Internet Control Message Protocol (ICMP)", answer: "Used by network devices to send error messages and operational information, commonly used by the ping command to test connectivity.", layer: "Network" }
 ]
 
-const getRandomCard = () => {
-  const randomIndex = Math.floor(Math.random() * cards.length)
-  setHistory([...history, currentIndex])  
-  setCurrentIndex(randomIndex)            
+const getNextCard = () => {
+  if (currentIndex < cards.length - 1) {
+    setCurrentIndex(currentIndex + 1)
+  }
 }
 
 const getPreviousCard = () => {
-  if (history.length > 0) {
-    const lastIndex = history[history.length - 1]
-    setCurrentIndex(lastIndex)
-    setHistory(history.slice(0, -1))
+  if (currentIndex > 0) {
+    setCurrentIndex(currentIndex - 1)
   }
+}
+
+const getRandomCard = () => {
+  const randomIndex = Math.floor(Math.random() * cards.length)
+  setCurrentIndex(randomIndex)
 }
 
   return (
@@ -54,11 +56,11 @@ const getPreviousCard = () => {
 
     <Card key={currentIndex} card={cards[currentIndex]} />  
 
-
-    <button onClick={getPreviousCard}>Previous</button>
-    <button onClick={getRandomCard}>Next</button>
-
-
+    <div className="nav-buttons">
+      <button onClick={getPreviousCard} disabled={currentIndex === 0}>Previous</button>
+      <button onClick={getNextCard} disabled={currentIndex === cards.length - 1}>Next</button>
+      <button onClick={getRandomCard}>Shuffle</button>
+    </div>
 
     </div>
   )
